@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/yash1616-accept/flask-back.git'
+            }
+        }
+
+        stage('Install Python Dependencies') {
+            steps {
+                sh 'pip3 install -r requirements.txt'
+            }
+        }
+
+        stage('Restart Flask Application') {
+            steps {
+                sh '''
+                pm2 restart flask-backend || 
+                pm2 start app.py --name flask-backend --interpreter python3
+                '''
+            }
+        }
+    }
+}
